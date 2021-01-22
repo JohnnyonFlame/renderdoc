@@ -696,7 +696,11 @@ HOOK_EXPORT EGLDisplay EGLAPIENTRY eglGetDisplay(EGLNativeDisplayType display)
 HOOK_EXPORT EGLDisplay EGLAPIENTRY eglGetPlatformDisplay(EGLenum platform, void *native_display,
                                                          const EGLAttrib *attrib_list)
 {
-  return eglGetPlatformDisplay_renderdoc_hooked(platform, native_display, attrib_list);
+  // eglGetPlatformDisplay not present, use eglGetDisplay instead
+  if (EGL.GetPlatformDisplay)
+    return eglGetPlatformDisplay_renderdoc_hooked(platform, native_display, attrib_list);
+  else
+    return eglGetDisplay_renderdoc_hooked((EGLNativeDisplayType)native_display);
 }
 
 HOOK_EXPORT EGLContext EGLAPIENTRY eglCreateContext(EGLDisplay display, EGLConfig config,
