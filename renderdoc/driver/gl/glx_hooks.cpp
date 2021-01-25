@@ -722,6 +722,10 @@ HOOK_EXPORT void HOOK_CC glEnd();
 
 void GLXHook::RegisterHooks()
 {
+  rdcstr toggle = Process::GetEnvVariable("RENDERDOC_HOOK_GL");
+  if (toggle.size() >= 1 && (toggle[0] == '0'))
+    return;
+
   RDCLOG("Registering GLX hooks");
 
   // register library hooks

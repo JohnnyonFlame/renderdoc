@@ -251,6 +251,10 @@ static void GLHooked(void *handle)
 
 void GLHook::RegisterHooks()
 {
+  rdcstr toggle = Process::GetEnvVariable("RENDERDOC_HOOK_GL");
+  if (toggle.size() >= 1 && (toggle[0] == '0'))
+    return;
+
 #if ENABLED(RDOC_ANDROID)
   // on android if EGL hooking is disabled we're using GLES layering, don't register any GL hooks
   if(!ShouldHookEGL())

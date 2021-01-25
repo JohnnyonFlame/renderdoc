@@ -32,6 +32,10 @@ class FakeVkHook : LibraryHook
 public:
   void RegisterHooks()
   {
+    rdcstr toggle = Process::GetEnvVariable("RENDERDOC_HOOK_GL");
+    if (toggle.size() >= 1 && (toggle[0] == '0'))
+      return;
+
     LibraryHooks::RegisterLibraryHook("libGL.so", &FakeVkHooked);
     LibraryHooks::RegisterLibraryHook("libGL.so.1", &FakeVkHooked);
   }

@@ -25,6 +25,11 @@
 #include "gl_common.h"
 #include "glx_dispatch_table.h"
 
+#ifndef DRENDERDOC_WINDOWING_XLIB
+int XFree(void *data) {return 0;}
+XErrorHandler XSetErrorHandler (XErrorHandler) { return NULL; }
+#endif
+
 static bool X11ErrorSeen = false;
 
 int NonFatalX11ErrorHandler(Display *display, XErrorEvent *error)

@@ -983,7 +983,8 @@ bool ShouldHookEGL()
 
 bool ShouldHookEGL()
 {
-  return true;
+  rdcstr toggle = Process::GetEnvVariable("RENDERDOC_HOOK_GLES");
+  return !(toggle.size() >= 1 && (toggle[0] != '0'));
 }
 
 #endif
