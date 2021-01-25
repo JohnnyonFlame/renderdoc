@@ -55,6 +55,17 @@ elseif(UNIX)
         PRIVATE -ldl
         PRIVATE -lrt)
 
+    if(ENABLE_GBM)
+        set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+        find_package(GBM REQUIRED)
+
+        list(APPEND RDOC_INCLUDES
+            PRIVATE ${LIBGBM_INCLUDE_DIRS})
+
+        list(APPEND RDOC_LIBRARIES
+            PRIVATE ${LIBGBM_LIBRARIES})
+    endif()
+    
     if(ENABLE_XLIB)
         find_package(X11 REQUIRED)
 

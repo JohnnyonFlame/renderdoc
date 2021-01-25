@@ -26,6 +26,10 @@
 #include "strings/string_utils.h"
 #include "egl_dispatch_table.h"
 #include "gl_common.h"
+#include <fcntl.h>
+#include <gbm.h>
+#include <stdio.h>
+#include <unistd.h>
 
 static void *GetEGLHandle()
 {
@@ -72,7 +76,7 @@ class EGLPlatform : public GLPlatform
     GLWindowingData ret = share;
 
     ret.egl_ctx = NULL;
-
+    
     if(EGL.CreateContext)
     {
       EGLint baseAttribs[] = {EGL_CONTEXT_CLIENT_VERSION, 3, EGL_CONTEXT_FLAGS_KHR,
@@ -373,6 +377,7 @@ class EGLPlatform : public GLPlatform
   bool PopulateForReplay() { return EGL.PopulateForReplay(); }
   ReplayStatus InitialiseAPI(GLWindowingData &replayContext, RDCDriver api, bool debug)
   {
+    int fd;
     Display *xlibDisplay = RenderDoc::Inst().GetGlobalEnvironment().xlibDisplay;
     wl_display *waylandDisplay = RenderDoc::Inst().GetGlobalEnvironment().waylandDisplay;
 
@@ -391,6 +396,11 @@ class EGLPlatform : public GLPlatform
       display = (EGLNativeDisplayType)waylandDisplay;
     else if(xlibDisplay)
       display = (EGLNativeDisplayType)xlibDisplay;
+    else {
+      fd = open("/dev/dri/card0", O_RDWR);
+      struct gbm_device *gbm = gbm_create_device(fd);
+      display = (EGLNativeDisplayType)gbm;
+    }
 
     EGLDisplay eglDisplay = EGL.GetDisplay(display);
     if(!eglDisplay)

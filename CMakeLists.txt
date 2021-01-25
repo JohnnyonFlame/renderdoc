@@ -178,6 +178,7 @@ option(ENABLE_RENDERDOCCMD "Enable renderdoccmd" ON)
 option(ENABLE_QRENDERDOC "Enable qrenderdoc" ON)
 option(ENABLE_PYRENDERDOC "Enable renderdoc python modules" ON)
 
+option(ENABLE_GBM "Enable GBM context support" ON)
 option(ENABLE_XLIB "Enable xlib windowing support" ON)
 option(ENABLE_XCB "Enable xcb windowing support" ON)
 option(ENABLE_WAYLAND "Enable experimental wayland windowing support" OFF)
@@ -291,6 +292,10 @@ endif()
 
 if(ENABLE_GLES)
     add_definitions(-DRENDERDOC_SUPPORT_GLES)
+endif()
+
+if(ENABLE_GBM)
+    add_definitions(-DRENDERDOC_SUPPORT_GBM)
 endif()
 
 if(ENABLE_EGL)
